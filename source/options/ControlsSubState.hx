@@ -23,6 +23,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
+import flixel.addons.display.FlxBackdrop;
 import Controls;
 
 using StringTools;
@@ -35,13 +36,13 @@ class ControlsSubState extends MusicBeatSubstate {
 	private var bindLength:Int = 0;
 
 	var optionShit:Array<Dynamic> = [
-		['NOTES'],
+		['ARROWS'],
 		['Left', 'note_left'],
 		['Down', 'note_down'],
 		['Up', 'note_up'],
 		['Right', 'note_right'],
 		[''],
-		['UI'],
+		['USER INTERFACE'],
 		['Left', 'ui_left'],
 		['Down', 'ui_down'],
 		['Up', 'ui_up'],
@@ -57,13 +58,14 @@ class ControlsSubState extends MusicBeatSubstate {
 		['Up', 'volume_up'],
 		['Down', 'volume_down'],
 		[''],
-		['DEBUG'],
+		['DEBUGGING'],
 		['Key 1', 'debug_1'],
 		['Key 2', 'debug_2']
 	];
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var grpInputs:Array<AttachedText> = [];
+        var checker:FlxBackdrop = new FlxBackdrop(Paths.image('Substate_Checker'), 0.2, 0.2, true, true);
 	private var grpInputsAlt:Array<AttachedText> = [];
 	var rebindingKey:Bool = false;
 	var nextAccept:Int = 5;
@@ -76,7 +78,9 @@ class ControlsSubState extends MusicBeatSubstate {
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
-
+                checker.x = OptionsState.checkerX;
+		checker.y = OptionsState.checkerY;
+		add(checker);
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 
@@ -115,6 +119,8 @@ class ControlsSubState extends MusicBeatSubstate {
 	var leaving:Bool = false;
 	var bindingTime:Float = 0;
 	override function update(elapsed:Float) {
+                checker.x -= 0.45 / (ClientPrefs.framerate / 60);
+		checker.y -= 0.16 / (ClientPrefs.framerate / 60);
 		if(!rebindingKey) {
 			if (controls.UI_UP_P) {
 				changeSelection(-1);
